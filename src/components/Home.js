@@ -2,6 +2,7 @@ import React from "react";
 import {initialStateSong, reducerSong, SongContext} from "../context/songContext";
 import {API_URL} from "../utils/api";
 import AddSong from "./AddSong";
+import EditSong from "./EditSong";
 import {AuthContext} from "../context/authContext.";
 import Card from "./Card";
 
@@ -13,6 +14,10 @@ const Home = () => {
     const toggleAddSong = () => {
         setAddSongModalVisibility(!isAddSongModalVisible);
     }
+
+
+
+    
 
     React.useEffect(() => {
         dispatch({
@@ -63,7 +68,8 @@ const Home = () => {
                     <>
                         {state.songs.length > 0 &&
                             state.songs.map(song => (
-                                <Card key={song.id.toString()} song={song} />
+                                <Card key={song.id.toString()} song={song}/>
+                                
                             ))}
                     </>
                 )}
