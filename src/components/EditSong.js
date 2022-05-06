@@ -10,16 +10,49 @@ const EditSong = (props) => {
     const [title, setTitle] = React.useState("");
     const [artist, setArtist] = React.useState("");
     const [imageUrl, setImageUrl] = React.useState("");
+    
 
     const onClose = e => {
         props.onClose && props.onClose(e);
     };
+
+    const onSubmitEdit = () => {
+        console.log("edit diklik")
+        
+        
+
+        fetch(`${API_URL}/songs/6`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+                "Content-Type": `application/json`
+            },
+            body: JSON.stringify(
+                 {
+                    artist : artist,
+                }
+            ),
+        })
+            .then(res => {
+                if (res.ok) {
+                    console.log(res)
+                    window.location.reload()
+                    
+                } else {
+                    throw res;
+                }
+            })
+            .catch(error => {
+            console.log(error)})
+    }
 
     const isButtonDisabled = title === "" || artist === "" || imageUrl === "";
 
     const klikEdit = () => {
         props.show = !props.show
     }
+
+
 
     if (!props.show) {
         return null;
@@ -37,15 +70,7 @@ const EditSong = (props) => {
                         <form className="modal-form">
                             <div className="modal-form-inputs">
 
-                                <label htmlFor="title">Title</label>
-                                <input
-                                    id="title"
-                                    name="title"
-                                    type="text"
-                                    value={title}
-                                    onChange={e => setTitle(e.target.value)}
-                                    className="text-input"
-                                />
+                             
 
                                 <label htmlFor="artist">Artist</label>
                                 <input
@@ -57,31 +82,17 @@ const EditSong = (props) => {
                                     className="text-input"
                                 />
 
-                                <label htmlFor="imageUrl">Image URL</label>
-                                <input
-                                    id="imageUrl"
-                                    name="imageUrl"
-                                    type="text"
-                                    value={imageUrl}
-                                    onChange={e => setImageUrl(e.target.value)}
-                                    className="text-input"
-                                />
+                                
                             </div>
 
 
-
-                            <div className="form-error">
-                                <p>
-                                    Error
-                                </p>
-                            </div>
                             <div className="form-action clearfix">
                                 <button
                                     type="button"
                                     id="overlay-confirm-button"
                                     className="button button-primary"
+                                    onClick={() => onSubmitEdit()}
                                     
-                                    disabled={isButtonDisabled}
                                 >
                                     Submit
                                 </button>
@@ -89,7 +100,7 @@ const EditSong = (props) => {
                                     type="button"
                                     id="overlay-cancel-button"
                                     className="button button-default small close-overlay pull-right"
-                                    
+                                    onClick={onClose}
                                 >
                                     Cancel
                                 </button>

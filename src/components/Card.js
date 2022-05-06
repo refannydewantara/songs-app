@@ -15,6 +15,15 @@ const Card = ({song}) => {
     const [artist, setArtist] = React.useState("");
     const [imageUrl, setImageUrl] = React.useState("");
 
+    const [isEditSongModalVisible, setEditSongModalVisibility] = React.useState(false);
+
+    const songid = song.id
+    
+    const toggleEditSong = () => {
+        setEditSongModalVisibility(!isEditSongModalVisible);
+        console.log(songid)
+    }
+
     const isButtonDisabled = title === "" || artist === "" || imageUrl === "";
 
 
@@ -47,6 +56,36 @@ const Card = ({song}) => {
         })
             .then(res => {
                 if (res.ok) {
+                    window.location.reload()
+                    
+                } else {
+                    throw res;
+                }
+            })
+            .catch(error => {
+            console.log(error)})
+    }
+
+    const onSubmitEdit = () => {
+        console.log("edit diklik")
+        console.log(songid)
+        
+
+        fetch(`${API_URL}/songs/` + song.id, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${authState.token}`,
+                "Content-Type": `application/json`
+            },
+            body: JSON.stringify(
+                 {
+                    artist : artist,
+                }
+            ),
+        })
+            .then(res => {
+                if (res.ok) {
+                    console.log(res)
                     window.location.reload()
                     
                 } else {
@@ -101,7 +140,7 @@ const Card = ({song}) => {
                 <button
                     type="button"
                     className="action-button edit"
-                    onClick={tesEdit}>
+                    onClick={toggleEditSong}>
                 Edit
                 </button>
                 <button
@@ -113,7 +152,9 @@ const Card = ({song}) => {
             </div>
             </div>
 
-            <EditSong show={false}></EditSong>
+            <EditSong onClose={toggleEditSong} show={isEditSongModalVisible} onSubmitEdit={onSubmitEdit}>
+            
+            </EditSong>
         </div>
 
         
