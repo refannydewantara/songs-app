@@ -31,7 +31,7 @@ const EditSong = (props) => {
                     <div className="modal-overlay small">
                         <div className="modal-header">
                             <h1 className="modal-title">
-                                ADD NEW SONG
+                                EDIT SONG
                             </h1>
                         </div>
                         <form className="modal-form">
